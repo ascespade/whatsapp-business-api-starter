@@ -1,9 +1,7 @@
-// backend/routes/webhook.js
-
 const express = require('express');
 const router = express.Router();
 
-// Webhook Verification (GET)
+// Meta Webhook Verification (GET)
 router.get('/', (req, res) => {
   const verifyToken = process.env.WEBHOOK_VERIFY_TOKEN;
 
@@ -16,25 +14,17 @@ router.get('/', (req, res) => {
       console.log('WEBHOOK_VERIFIED');
       res.status(200).send(challenge);
     } else {
-      res.sendStatus(403);
+      res.sendStatus(403); // Forbidden
     }
   } else {
-    res.sendStatus(400);
+    res.sendStatus(400); // Bad Request
   }
 });
 
-// Webhook Receiver (POST)
+// Receiving Webhook Events (POST)
 router.post('/', (req, res) => {
-  const body = req.body;
-
-  console.log('Received webhook:', JSON.stringify(body, null, 2));
-
-  if (body.object) {
-    // Handle incoming messages or events here
-    res.status(200).send('EVENT_RECEIVED');
-  } else {
-    res.sendStatus(404);
-  }
+  console.log('Webhook received:', JSON.stringify(req.body, null, 2));
+  res.sendStatus(200);
 });
 
 module.exports = router;
